@@ -1,0 +1,24 @@
+button {
+    display: inline-block;
+    height: 100px;
+    padding: 0;
+    margin: 0;
+    vertical-align: top;
+    width: 100px;
+    position: absolute;
+    border-width: 2px;
+    border-color: 'white';
+}
+
+#close-image img {
+    display: block;
+    height: 100px;  
+    width: 100px;
+    position: relative;
+}
+
+#close-CSS {
+    background-size: 100px 100px;
+    height: 100px;  
+    width: 100px;
+}

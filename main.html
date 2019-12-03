@@ -1,0 +1,183 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Chess</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+  <link rel="stylesheet" href="styles.css">
+  <script src="scripts.js"></script>
+
+</head>
+
+<script>
+
+  var currentIndex = 0;
+
+  function createButtons() {
+
+    var s = '<button class="button_new" onclick="newOnClick()" style="background-color: gray; position: absolute; left: 860px; top: 20px; width: 200px; height: 50px; font-size: 20pt; font-weight: bold;">New Game</button>';
+    var red = true;
+
+    var index = 0;
+
+    for (i = 0; i < 8; i++) {
+      for (j = 0; j < 8; j++) {
+
+        s += '<button value="' + index++ + '" onclick="buttonOnClick(this.value)" id="close-image" style="background-color: ';
+
+        if (red) {
+          s += '#D4C4C4; ';
+          red = false;
+        }
+        else {
+          s += '#D87D7D; ';
+          red = true;
+        }
+
+        s += 'left: ' + (560 + j * 100).toString() + 'px; ';
+        s += 'top: ' + (100 + i * 100).toString() + 'px; border-color: white">';
+        s += '</button>';      
+      }
+      red = !red;
+    }
+
+    document.body.innerHTML = s;
+    setDefaultImages();
+  }
+
+  function buttonOnClick(index) {
+    document.getElementsByTagName('button')[currentIndex].style.borderWidth = '2px';
+    document.getElementsByTagName('button')[currentIndex].style.borderColor = 'white';
+    index++;
+    currentIndex = index;
+    document.getElementsByTagName('button')[currentIndex].style.borderWidth = '5px';
+    document.getElementsByTagName('button')[currentIndex].style.borderColor = 'red';
+  }
+
+  function setDefaultImages() {
+
+      //var i = document.getElementsByTagName('button').length;
+
+      document.getElementsByTagName('button')[1].appendChild(getImage('rook'));
+      document.getElementsByTagName('button')[2].appendChild(getImage('knight'));
+      document.getElementsByTagName('button')[3].appendChild(getImage('bishop'));
+      document.getElementsByTagName('button')[4].appendChild(getImage('king'));
+      document.getElementsByTagName('button')[5].appendChild(getImage('queen'));
+      document.getElementsByTagName('button')[6].appendChild(getImage('bishop'));
+      document.getElementsByTagName('button')[7].appendChild(getImage('knight'));
+      document.getElementsByTagName('button')[8].appendChild(getImage('rook'));
+
+      for (i = 9; i < 17; i++) {
+        document.getElementsByTagName('button')[i].appendChild(getImage('pawn'));
+      }
+
+      for (i = 49; i < 57; i++) {
+        document.getElementsByTagName('button')[i].appendChild(getImage('pawn'));
+      }
+
+      document.getElementsByTagName('button')[57].appendChild(getImage('rook'));
+      document.getElementsByTagName('button')[58].appendChild(getImage('knight'));
+      document.getElementsByTagName('button')[59].appendChild(getImage('bishop'));
+      document.getElementsByTagName('button')[60].appendChild(getImage('king'));
+      document.getElementsByTagName('button')[61].appendChild(getImage('queen'));
+      document.getElementsByTagName('button')[62].appendChild(getImage('bishop'));
+      document.getElementsByTagName('button')[63].appendChild(getImage('knight'));
+      document.getElementsByTagName('button')[64].appendChild(getImage('rook'));
+
+  }
+
+  function getImage(piece) {
+      var image = document.createElement('image');
+      image.innerHTML = '<img src="' + piece + '.png">';
+      return image;
+  }
+
+  function newOnClick() {
+    createButtons();
+  }
+</script>
+
+<body onload="createButtons()">
+  <!-- 
+  <button id="close-image"><img src="rook.png"></button>
+  <button id="close-CSS"></button>
+  -->
+  
+  <!--
+  <button id="close-image" style="background-color: #D4C4C4; left: 560px; top: 100px;"><img src="rook.png"></button>
+  <button id="close-image" style="background-color: #D87D7D; left: 660px; top: 100px;"><img src="rook.png"></button>
+  <button style="background-color: #D4C4C4; left: 760px; top: 100px;"></button>
+  <button style="background-color: #D87D7D; left: 860px; top: 100px;"></button>
+  <button style="background-color: #D4C4C4; left: 960px; top: 100px;"></button>
+  <button style="background-color: #D87D7D; left: 1060px; top: 100px;"></button>
+  <button style="background-color: #D4C4C4; left: 1160px; top: 100px;"></button>
+  <button style="background-color: #D87D7D; left: 1260px; top: 100px;"></button>
+
+  <button style="background-color: #D87D7D; left: 560px; top: 200px;"></button>
+  <button style="background-color: #D4C4C4; left: 660px; top: 200px;"></button>
+  <button style="background-color: #D87D7D; left: 760px; top: 200px;"></button>
+  <button style="background-color: #D4C4C4; left: 860px; top: 200px;"></button>
+  <button style="background-color: #D87D7D; left: 960px; top: 200px;"></button>
+  <button style="background-color: #D4C4C4; left: 1060px; top: 200px;"></button>
+  <button style="background-color: #D87D7D; left: 1160px; top: 200px;"></button>
+  <button style="background-color: #D4C4C4; left: 1260px; top: 200px;"></button>
+
+  <button style="background-color: #D4C4C4; left: 560px; top: 300px;"></button>
+  <button style="background-color: #D87D7D; left: 660px; top: 300px;"></button>
+  <button style="background-color: #D4C4C4; left: 760px; top: 300px;"></button>
+  <button style="background-color: #D87D7D; left: 860px; top: 300px;"></button>
+  <button style="background-color: #D4C4C4; left: 960px; top: 300px;"></button>
+  <button style="background-color: #D87D7D; left: 1060px; top: 300px;"></button>
+  <button style="background-color: #D4C4C4; left: 1160px; top: 300px;"></button>
+  <button style="background-color: #D87D7D; left: 1260px; top: 300px;"></button>
+
+  <button style="background-color: #D87D7D; left: 560px; top: 400px;"></button>
+  <button style="background-color: #D4C4C4; left: 660px; top: 400px;"></button>
+  <button style="background-color: #D87D7D; left: 760px; top: 400px;"></button>
+  <button style="background-color: #D4C4C4; left: 860px; top: 400px;"></button>
+  <button style="background-color: #D87D7D; left: 960px; top: 400px;"></button>
+  <button style="background-color: #D4C4C4; left: 1060px; top: 400px;"></button>
+  <button style="background-color: #D87D7D; left: 1160px; top: 400px;"></button>
+  <button style="background-color: #D4C4C4; left: 1260px; top: 400px;"></button>
+
+  <button style="background-color: #D4C4C4; left: 560px; top: 500px;"></button>
+  <button style="background-color: #D87D7D; left: 660px; top: 500px;"></button>
+  <button style="background-color: #D4C4C4; left: 760px; top: 500px;"></button>
+  <button style="background-color: #D87D7D; left: 860px; top: 500px;"></button>
+  <button style="background-color: #D4C4C4; left: 960px; top: 500px;"></button>
+  <button style="background-color: #D87D7D; left: 1060px; top: 500px;"></button>
+  <button style="background-color: #D4C4C4; left: 1160px; top: 500px;"></button>
+  <button style="background-color: #D87D7D; left: 1260px; top: 500px;"></button>
+
+  <button style="background-color: #D87D7D; left: 560px; top: 600px;"></button>
+  <button style="background-color: #D4C4C4; left: 660px; top: 600px;"></button>
+  <button style="background-color: #D87D7D; left: 760px; top: 600px;"></button>
+  <button style="background-color: #D4C4C4; left: 860px; top: 600px;"></button>
+  <button style="background-color: #D87D7D; left: 960px; top: 600px;"></button>
+  <button style="background-color: #D4C4C4; left: 1060px; top: 600px;"></button>
+  <button style="background-color: #D87D7D; left: 1160px; top: 600px;"></button>
+  <button style="background-color: #D4C4C4; left: 1260px; top: 600px;"></button>
+
+  <button style="background-color: #D4C4C4; left: 560px; top: 700px;"></button>
+  <button style="background-color: #D87D7D; left: 660px; top: 700px;"></button>
+  <button style="background-color: #D4C4C4; left: 760px; top: 700px;"></button>
+  <button style="background-color: #D87D7D; left: 860px; top: 700px;"></button>
+  <button style="background-color: #D4C4C4; left: 960px; top: 700px;"></button>
+  <button style="background-color: #D87D7D; left: 1060px; top: 700px;"></button>
+  <button style="background-color: #D4C4C4; left: 1160px; top: 700px;"></button>
+  <button style="background-color: #D87D7D; left: 1260px; top: 700px;"></button>
+
+  <button style="background-color: #D87D7D; left: 560px; top: 800px;"></button>
+  <button style="background-color: #D4C4C4; left: 660px; top: 800px;"></button>
+  <button style="background-color: #D87D7D; left: 760px; top: 800px;"></button>
+  <button style="background-color: #D4C4C4; left: 860px; top: 800px;"></button>
+  <button style="background-color: #D87D7D; left: 960px; top: 800px;"></button>
+  <button style="background-color: #D4C4C4; left: 1060px; top: 800px;"></button>
+  <button style="background-color: #D87D7D; left: 1160px; top: 800px;"></button>
+  <button style="background-color: #D4C4C4; left: 1260px; top: 800px;"></button>
+
+-->
+</body>
+</html>
