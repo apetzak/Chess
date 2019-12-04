@@ -114,63 +114,160 @@
     var buttons = document.getElementsByTagName('button');
 
     if (s.includes('pawn')) {
-
+        setPawnMoves();
         currentSelection = "pawn";
-        var startingIndexes =  [8, 9, 10, 11, 12, 13, 14, 15];
-
-        // one space forward
-        if (!playerPieces.includes(+currentIndex + 8)) {
-          setButtonBorder(+currentIndex + 8, 5, 'gray');
-
-          if (startingIndexes.includes(+currentIndex)) {
-            // allow two spaces forward on first move
-            setButtonBorder(+currentIndex + 16, 5, 'gray');
-            }
-          }
       }
       else if (s.includes('rook')) {
+        // any number horiz or vert (also moved while castling)
+        setVerticalMoves();
+        setHorizontalMoves();
         currentSelection = "rook";
       }
       else if (s.includes('knight')) {
+        // 2 vert, 1 horz (or vice versa), can jump over pieces
+        setKnightMoves();
         currentSelection = "knight";
       }
       else if (s.includes('bishop')) {
+        // any number diagonal
+        setDiagonalMoves();
         currentSelection = "bishop";
       }
       else if (s.includes('queen')) {
+        // any number diagonal, vert, or horiz
+        setVerticalMoves();
+        setHorizontalMoves();
+        setDiagonalMoves();
         currentSelection = "queen";
       }
       else if (s.includes('king')) {
-        if (!playerPieces.includes(+currentIndex + 8))
-          setButtonBorder(+currentIndex + 8, 5, 'gray');
-
-        if (!playerPieces.includes(+currentIndex - 8))
-          setButtonBorder(+currentIndex - 8, 5, 'gray');
-
-        if (!playerPieces.includes(+currentIndex + 1))   
-          setButtonBorder(+currentIndex + 1, 5, 'gray');
-
-        if (!playerPieces.includes(+currentIndex - 1))
-          setButtonBorder(+currentIndex - 1, 5, 'gray');
-
+        // one vert or horz (one castling per game)
+        setKingMoves();
         currentSelection = "king";
       }
   }
 
   function setVerticalMoves() {
+    var v = 0;
     while (true) {
+      v += 8;
+      if (!playerPieces.includes(+currentIndex + v) && v <= 64)
+        setButtonBorder(+currentIndex + v, 5, 'gray');
+      else
+        break;
+    }
 
+    v = 0;
+    while (true) {
+      v -= 8;
+      if (!playerPieces.includes(+currentIndex + v) && v >= -64)
+        setButtonBorder(+currentIndex + v, 5, 'gray');
+      else
+        break;
     }
   }
 
   function setHorizontalMoves() {
+    var btns = document.getElementsByTagName('button');
 
+    for (i = 0; i < btns.length; i++) {
+      if (btns[i].style.top == btns[currentIndex].style.top && i != currentIndex) {       
+        if (!playerPieces.includes(i))
+          setButtonBorder(i, 5, 'gray');
+      }
+    }
+
+     for (i = 0; i < btns.length; i++) {
+      if (btns[i].style.top == btns[currentIndex].style.top && i != currentIndex) {       
+        //if (btns[i].style.borderColor === 'gray')
+            //setButtonBorder(i, 2, 'white');
+      }
+    }
+  }
+
+  function setDiagonalMove(z) {
+    var btns = document.getElementsByTagName('button'); 
+    //var x = currentIndex / 8 + 1;
+    for (i = 1; i < 9; i++) {
+      var v = +currentIndex + z * i;
+      //var btn = btns[v];
+      //if (btn == null)
+        //continue;
+
+      //if (v > 63 - currentIndex || v < 0)
+        //break;
+
+      //var z1 = btns[v].style.left.replace('px', '');
+      //var z2 = btns[currentIndex].style.left.replace('px', '');
+      if (!playerPieces.includes(v))
+        setButtonBorder(v, 5, 'gray');
+    } 
+  }
+
+  function setDiagonalMoves() {
+    setDiagonalMove(9);
+    setDiagonalMove(-9);
+    setDiagonalMove(7);
+    setDiagonalMove(-7);
+  }
+
+  function setPawnMoves() {
+    var startingIndexes =  [8, 9, 10, 11, 12, 13, 14, 15];
+    // one space forward
+    if (!playerPieces.includes(+currentIndex + 8)) {
+      setButtonBorder(+currentIndex + 8, 5, 'gray');
+      if (!playerPieces.includes(+currentIndex + 16) && startingIndexes.includes(+currentIndex)) {
+        // allow two spaces forward on first move
+        setButtonBorder(+currentIndex + 16, 5, 'gray');
+        }
+    }
+  }
+
+  function setKnightMoves() {
+    if (!playerPieces.includes(+currentIndex + 17))
+      setButtonBorder(+currentIndex + 17, 5, 'gray');
+
+    if (!playerPieces.includes(+currentIndex - 17))
+      setButtonBorder(+currentIndex - 17, 5, 'gray');
+
+    if (!playerPieces.includes(+currentIndex + 15))   
+      setButtonBorder(+currentIndex + 15, 5, 'gray');
+
+    if (!playerPieces.includes(+currentIndex - 15))
+      setButtonBorder(+currentIndex - 15, 5, 'gray');
+
+    if (!playerPieces.includes(+currentIndex + 10))   
+      setButtonBorder(+currentIndex + 10, 5, 'gray');
+
+    if (!playerPieces.includes(+currentIndex - 10))
+      setButtonBorder(+currentIndex - 10, 5, 'gray');
+
+    if (!playerPieces.includes(+currentIndex + 6))
+      setButtonBorder(+currentIndex + 6, 5, 'gray');
+
+    if (!playerPieces.includes(+currentIndex - 6))
+      setButtonBorder(+currentIndex - 6, 5, 'gray');
+
+  }
+
+  function setKingMoves() {
+    if (!playerPieces.includes(+currentIndex + 8))
+      setButtonBorder(+currentIndex + 8, 5, 'gray');
+
+    if (!playerPieces.includes(+currentIndex - 8))
+      setButtonBorder(+currentIndex - 8, 5, 'gray');
+
+    if (!playerPieces.includes(+currentIndex + 1))   
+      setButtonBorder(+currentIndex + 1, 5, 'gray');
+
+    if (!playerPieces.includes(+currentIndex - 1))
+      setButtonBorder(+currentIndex - 1, 5, 'gray');
   }
 
   function clearMoves() {
     for (i = 0; i < 64; i++) {
       var btn = document.getElementsByTagName('button')[i];
-      if (btn.style.borderColor === 'gray')
+      if (btn.style.borderColor == 'gray')
         btn.style.borderWidth = '2px';
         btn.style.borderColor = 'white';
       }
