@@ -16,12 +16,12 @@
   var currentIndex = 0;
   var currentSelection = "";
   var playersTurn = true;
-  var playerPieces = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-  var opponentPieces = [49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64];
+  var playerPieces = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+  var opponentPieces = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63];
 
   function createButtons() {
 
-    var s = '<button class="button_new" onclick="newOnClick()" style="background-color: gray; position: absolute; left: 860px; top: 20px; width: 200px; height: 50px; font-size: 20pt; font-weight: bold;">New Game</button>';
+    var s = '';
     var red = true;
 
     var index = 0;
@@ -45,6 +45,7 @@
       red = !red; // alternate color on next row
     }
 
+    s += '<button class="button_new" onclick="newOnClick()" style="background-color: gray; position: absolute; left: 860px; top: 20px; width: 200px; height: 50px; font-size: 20pt; font-weight: bold;">New Game</button>';
     document.body.innerHTML = s;
     setDefaultImages();
   }
@@ -73,14 +74,12 @@
 
     var buttons = document.getElementsByTagName('button');
 
-    var v = ++index;
-
-    if (buttons[v].style.borderColor === 'gray') {
+    if (buttons[index].style.borderColor === 'gray') {
       // move selected piece
       var image = buttons[currentIndex].getElementsByTagName('img')[0];
       image.parentElement.removeChild(image);
       buttons[index].appendChild(image);
-      playerPieces[playerPieces.indexOf(currentIndex)] = index;
+      playerPieces[playerPieces.indexOf(+currentIndex)] = +index;
       setButtonBorder(index, 2, 'white');
       setButtonBorder(currentIndex, 2, 'white');
       clearMoves();
@@ -89,17 +88,14 @@
     }
     else {
       // don't allow selection on imageless buttons
-      var i = buttons[v].getElementsByTagName('img')[0];
+      var i = buttons[index].getElementsByTagName('img')[0];
       if (i == null)
         return;
     }
 
-    index--;
-
     clearMoves();
 
     setButtonBorder(currentIndex, 2, 'white');
-    index++;
     currentIndex = index;
     setButtonBorder(currentIndex, 5, 'red');
 
@@ -120,15 +116,15 @@
     if (s.includes('pawn')) {
 
         currentSelection = "pawn";
-        var startingIndexes =  [8, 9, 10, 11, 12, 13, 14, 15, 16];
+        var startingIndexes =  [8, 9, 10, 11, 12, 13, 14, 15];
 
         // one space forward
-        if (!playerPieces.includes(currentIndex + 8)) {
-          setButtonBorder(currentIndex + 8, 5, 'gray');
+        if (!playerPieces.includes(+currentIndex + 8)) {
+          setButtonBorder(+currentIndex + 8, 5, 'gray');
 
-          if (startingIndexes.includes(currentIndex)) {
+          if (startingIndexes.includes(+currentIndex)) {
             // allow two spaces forward on first move
-            setButtonBorder(currentIndex + 16, 5, 'gray');
+            setButtonBorder(+currentIndex + 16, 5, 'gray');
             }
           }
       }
@@ -145,17 +141,17 @@
         currentSelection = "queen";
       }
       else if (s.includes('king')) {
-        if (!playerPieces.includes(currentIndex + 8))
-          setButtonBorder(currentIndex + 8, 5, 'gray');
+        if (!playerPieces.includes(+currentIndex + 8))
+          setButtonBorder(+currentIndex + 8, 5, 'gray');
 
-        if (!playerPieces.includes(currentIndex - 8))
-          setButtonBorder(currentIndex - 8, 5, 'gray');
+        if (!playerPieces.includes(+currentIndex - 8))
+          setButtonBorder(+currentIndex - 8, 5, 'gray');
 
-        if (!playerPieces.includes(currentIndex + 1))   
-          setButtonBorder(currentIndex + 1, 5, 'gray');
+        if (!playerPieces.includes(+currentIndex + 1))   
+          setButtonBorder(+currentIndex + 1, 5, 'gray');
 
-        if (!playerPieces.includes(currentIndex - 1))
-          setButtonBorder(currentIndex - 1, 5, 'gray');
+        if (!playerPieces.includes(+currentIndex - 1))
+          setButtonBorder(+currentIndex - 1, 5, 'gray');
 
         currentSelection = "king";
       }
@@ -172,7 +168,7 @@
   }
 
   function clearMoves() {
-    for (i = 1; i < 65; i++) {
+    for (i = 0; i < 64; i++) {
       var btn = document.getElementsByTagName('button')[i];
       if (btn.style.borderColor === 'gray')
         btn.style.borderWidth = '2px';
@@ -184,31 +180,31 @@
 
       var buttons = document.getElementsByTagName('button');
 
-      buttons[1].appendChild(getImage('rook'));
-      buttons[2].appendChild(getImage('knight'));
-      buttons[3].appendChild(getImage('bishop'));
-      buttons[4].appendChild(getImage('king'));
-      buttons[5].appendChild(getImage('queen'));
-      buttons[6].appendChild(getImage('bishop'));
-      buttons[7].appendChild(getImage('knight'));
-      buttons[8].appendChild(getImage('rook'));
+      buttons[0].appendChild(getImage('rook'));
+      buttons[1].appendChild(getImage('knight'));
+      buttons[2].appendChild(getImage('bishop'));
+      buttons[3].appendChild(getImage('king'));
+      buttons[4].appendChild(getImage('queen'));
+      buttons[5].appendChild(getImage('bishop'));
+      buttons[6].appendChild(getImage('knight'));
+      buttons[7].appendChild(getImage('rook'));
 
-      for (i = 9; i < 17; i++) {
+      for (i = 8; i < 16; i++) {
         buttons[i].appendChild(getImage('pawn'));
       }
 
-      for (i = 49; i < 57; i++) {
+      for (i = 48; i < 56; i++) {
         buttons[i].appendChild(getImage('pawn'));
       }
 
-      buttons[57].appendChild(getImage('rook'));
-      buttons[58].appendChild(getImage('knight'));
-      buttons[59].appendChild(getImage('bishop'));
-      buttons[60].appendChild(getImage('king'));
-      buttons[61].appendChild(getImage('queen'));
-      buttons[62].appendChild(getImage('bishop'));
-      buttons[63].appendChild(getImage('knight'));
-      buttons[64].appendChild(getImage('rook'));
+      buttons[56].appendChild(getImage('rook'));
+      buttons[57].appendChild(getImage('knight'));
+      buttons[58].appendChild(getImage('bishop'));
+      buttons[59].appendChild(getImage('king'));
+      buttons[60].appendChild(getImage('queen'));
+      buttons[61].appendChild(getImage('bishop'));
+      buttons[62].appendChild(getImage('knight'));
+      buttons[63].appendChild(getImage('rook'));
   }
 
   function getImage(piece) {
@@ -219,8 +215,8 @@
 
   function newOnClick() {
     createButtons();
-    playerPieces = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-    opponentPieces = [49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64];
+    playerPieces = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+    opponentPieces = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63];
   }
 </script>
 
