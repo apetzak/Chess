@@ -14,6 +14,10 @@
 <script>
 
   var currentIndex = 0;
+  var currentSelection = "";
+  var playersTurn = true;
+  var playerPieces = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+  var opponentPieces = [49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64];
 
   function createButtons() {
 
@@ -27,65 +31,184 @@
 
         s += '<button value="' + index++ + '" onclick="buttonOnClick(this.value)" id="close-image" style="background-color: ';
 
-        if (red) {
-          s += '#D4C4C4; ';
-          red = false;
-        }
-        else {
+        if (red)
+          s += '#D4C4C4; ';       
+        else // gray
           s += '#D87D7D; ';
-          red = true;
-        }
+        
+        red = !red;
 
         s += 'left: ' + (560 + j * 100).toString() + 'px; ';
         s += 'top: ' + (100 + i * 100).toString() + 'px; border-color: white">';
         s += '</button>';      
       }
-      red = !red;
+      red = !red; // alternate color on next row
     }
 
     document.body.innerHTML = s;
     setDefaultImages();
   }
 
+  function moveOppponent() {
+
+
+  }
+
+  function setButtonBorder(i, width, color) {
+    var btn = document.getElementsByTagName('button')[i];
+
+    if (btn == null)
+      return;
+
+    btn.style.borderWidth = width + 'px';
+    btn.style.borderColor = color;
+  }
+
   function buttonOnClick(index) {
-    document.getElementsByTagName('button')[currentIndex].style.borderWidth = '2px';
-    document.getElementsByTagName('button')[currentIndex].style.borderColor = 'white';
+
+    if (!playersTurn) {
+      moveOppponent();
+      //return;
+    }
+
+    var buttons = document.getElementsByTagName('button');
+
+    var v = ++index;
+
+    if (buttons[v].style.borderColor === 'gray') {
+      // move selected piece
+      var image = buttons[currentIndex].getElementsByTagName('img')[0];
+      image.parentElement.removeChild(image);
+      buttons[index].appendChild(image);
+      playerPieces[playerPieces.indexOf(currentIndex)] = index;
+      setButtonBorder(index, 2, 'white');
+      setButtonBorder(currentIndex, 2, 'white');
+      clearMoves();
+      playersTurn = false;
+      return;
+    }
+    else {
+      // don't allow selection on imageless buttons
+      var i = buttons[v].getElementsByTagName('img')[0];
+      if (i == null)
+        return;
+    }
+
+    index--;
+
+    clearMoves();
+
+    setButtonBorder(currentIndex, 2, 'white');
     index++;
     currentIndex = index;
-    document.getElementsByTagName('button')[currentIndex].style.borderWidth = '5px';
-    document.getElementsByTagName('button')[currentIndex].style.borderColor = 'red';
+    setButtonBorder(currentIndex, 5, 'red');
+
+    var i = buttons[currentIndex].getElementsByTagName('img')[0];
+
+    if (i != null) {
+      getMove(i.src.toString());
+    }
+    else {
+      currentSelection = "";
+    }
+  }
+
+  function getMove(s) {
+
+    var buttons = document.getElementsByTagName('button');
+
+    if (s.includes('pawn')) {
+
+        currentSelection = "pawn";
+        var startingIndexes =  [8, 9, 10, 11, 12, 13, 14, 15, 16];
+
+        // one space forward
+        if (!playerPieces.includes(currentIndex + 8)) {
+          setButtonBorder(currentIndex + 8, 5, 'gray');
+
+          if (startingIndexes.includes(currentIndex)) {
+            // allow two spaces forward on first move
+            setButtonBorder(currentIndex + 16, 5, 'gray');
+            }
+          }
+      }
+      else if (s.includes('rook')) {
+        currentSelection = "rook";
+      }
+      else if (s.includes('knight')) {
+        currentSelection = "knight";
+      }
+      else if (s.includes('bishop')) {
+        currentSelection = "bishop";
+      }
+      else if (s.includes('queen')) {
+        currentSelection = "queen";
+      }
+      else if (s.includes('king')) {
+        if (!playerPieces.includes(currentIndex + 8))
+          setButtonBorder(currentIndex + 8, 5, 'gray');
+
+        if (!playerPieces.includes(currentIndex - 8))
+          setButtonBorder(currentIndex - 8, 5, 'gray');
+
+        if (!playerPieces.includes(currentIndex + 1))   
+          setButtonBorder(currentIndex + 1, 5, 'gray');
+
+        if (!playerPieces.includes(currentIndex - 1))
+          setButtonBorder(currentIndex - 1, 5, 'gray');
+
+        currentSelection = "king";
+      }
+  }
+
+  function setVerticalMoves() {
+    while (true) {
+
+    }
+  }
+
+  function setHorizontalMoves() {
+
+  }
+
+  function clearMoves() {
+    for (i = 1; i < 65; i++) {
+      var btn = document.getElementsByTagName('button')[i];
+      if (btn.style.borderColor === 'gray')
+        btn.style.borderWidth = '2px';
+        btn.style.borderColor = 'white';
+      }
   }
 
   function setDefaultImages() {
 
-      //var i = document.getElementsByTagName('button').length;
+      var buttons = document.getElementsByTagName('button');
 
-      document.getElementsByTagName('button')[1].appendChild(getImage('rook'));
-      document.getElementsByTagName('button')[2].appendChild(getImage('knight'));
-      document.getElementsByTagName('button')[3].appendChild(getImage('bishop'));
-      document.getElementsByTagName('button')[4].appendChild(getImage('king'));
-      document.getElementsByTagName('button')[5].appendChild(getImage('queen'));
-      document.getElementsByTagName('button')[6].appendChild(getImage('bishop'));
-      document.getElementsByTagName('button')[7].appendChild(getImage('knight'));
-      document.getElementsByTagName('button')[8].appendChild(getImage('rook'));
+      buttons[1].appendChild(getImage('rook'));
+      buttons[2].appendChild(getImage('knight'));
+      buttons[3].appendChild(getImage('bishop'));
+      buttons[4].appendChild(getImage('king'));
+      buttons[5].appendChild(getImage('queen'));
+      buttons[6].appendChild(getImage('bishop'));
+      buttons[7].appendChild(getImage('knight'));
+      buttons[8].appendChild(getImage('rook'));
 
       for (i = 9; i < 17; i++) {
-        document.getElementsByTagName('button')[i].appendChild(getImage('pawn'));
+        buttons[i].appendChild(getImage('pawn'));
       }
 
       for (i = 49; i < 57; i++) {
-        document.getElementsByTagName('button')[i].appendChild(getImage('pawn'));
+        buttons[i].appendChild(getImage('pawn'));
       }
 
-      document.getElementsByTagName('button')[57].appendChild(getImage('rook'));
-      document.getElementsByTagName('button')[58].appendChild(getImage('knight'));
-      document.getElementsByTagName('button')[59].appendChild(getImage('bishop'));
-      document.getElementsByTagName('button')[60].appendChild(getImage('king'));
-      document.getElementsByTagName('button')[61].appendChild(getImage('queen'));
-      document.getElementsByTagName('button')[62].appendChild(getImage('bishop'));
-      document.getElementsByTagName('button')[63].appendChild(getImage('knight'));
-      document.getElementsByTagName('button')[64].appendChild(getImage('rook'));
-
+      buttons[57].appendChild(getImage('rook'));
+      buttons[58].appendChild(getImage('knight'));
+      buttons[59].appendChild(getImage('bishop'));
+      buttons[60].appendChild(getImage('king'));
+      buttons[61].appendChild(getImage('queen'));
+      buttons[62].appendChild(getImage('bishop'));
+      buttons[63].appendChild(getImage('knight'));
+      buttons[64].appendChild(getImage('rook'));
   }
 
   function getImage(piece) {
@@ -96,6 +219,8 @@
 
   function newOnClick() {
     createButtons();
+    playerPieces = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+    opponentPieces = [49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64];
   }
 </script>
 
