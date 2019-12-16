@@ -199,21 +199,35 @@
   function setHorizontalMoves() {
     var btns = document.getElementsByTagName('button');
 
-    for (i = 0; i < btns.length; i++) {
-      if (btns[i].style.top == btns[currentIndex].style.top && i != currentIndex) {       
-        if (!attacker.includes(i))
-          setButtonBorder(i, 5, 'gray');
+    var v = +currentIndex;
+    while (true) {
+      v += 1;
 
-        if (defender.includes(i))
-          break;
-      }
+      if (btns[v].style.top != btns[currentIndex].style.top)
+        break;
+
+      if (!attacker.includes(v))
+        setButtonBorder(v, 5, 'gray');
+      else
+        break;
+
+      if (defender.includes(v))
+        break;
     }
 
-     for (i = 0; i < btns.length; i++) {
-      if (btns[i].style.top == btns[currentIndex].style.top && i != currentIndex) {       
-        //if (btns[i].style.borderColor === 'gray')
-            //setButtonBorder(i, 2, 'white');
-      }
+    v = currentIndex;
+    while (true) {
+      v -= 1;
+      if (btns[v].style.top != btns[currentIndex].style.top)
+        break;
+
+      if (!attacker.includes(v))
+        setButtonBorder(v, 5, 'gray');
+      else
+        break;
+
+      if (defender.includes(v))
+        break;
     }
   }
 
