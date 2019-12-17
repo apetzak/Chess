@@ -21,6 +21,7 @@
   var defender;
   var normalMode = true; // non-normal mode = capture all enemy pieces to win
   var gameIsActive = true;
+  var btns;
 
   function createButtons() {
     var s = '';
@@ -47,11 +48,12 @@
     'position: absolute; left: 970px; top: 20px; width: 200px; height: 50px; font-size: 20pt; font-weight: bold;">Capture King</button>';
 
     document.body.innerHTML = s;
+    btns = document.getElementsByTagName('button');
     setDefaultImages();
   }
 
   function setButtonBorder(i, width, color) {
-    var btn = document.getElementsByTagName('button')[i];
+    var btn = btns[i];
     if (btn == null || (color == "gray" && attacker.includes(i)))
       return false;      
     btn.style.borderWidth = width + 'px';
@@ -65,18 +67,17 @@
 
     attacker = playersTurn ? playerPieces : opponentPieces;
     defender = playersTurn ? opponentPieces : playerPieces;
-    var buttons = document.getElementsByTagName('button');
 
-    if (buttons[index].style.borderColor === 'gray') {
+    if (btns[index].style.borderColor === 'gray') {
       // move selected piece
-      var image = buttons[currentIndex].getElementsByTagName('img')[0];
+      var image = btns[currentIndex].getElementsByTagName('img')[0];
       image.parentElement.removeChild(image);
-      buttons[index].appendChild(image);
+      btns[index].appendChild(image);
       attacker[attacker.indexOf(+currentIndex)] = +index;
 
       if (defender.includes(+index)) {
         // remove piece
-        var image = buttons[index].getElementsByTagName('img')[0];
+        var image = btns[index].getElementsByTagName('img')[0];
         image.parentElement.removeChild(image);
         defender.splice(defender.indexOf(+index), 1);
 
@@ -94,7 +95,7 @@
 
     // don't allow selecting the other players pieces
     // don't allow selection on imageless buttons
-    if (defender.includes(+index) || buttons[index].getElementsByTagName('img')[0] == null)
+    if (defender.includes(+index) || btns[index].getElementsByTagName('img')[0] == null)
       return;
 
     clearMoves();
@@ -103,7 +104,7 @@
     currentIndex = index; // switch to new index
     setButtonBorder(currentIndex, 5, 'red');
 
-    var i = buttons[currentIndex].getElementsByTagName('img')[0];
+    var i = btns[currentIndex].getElementsByTagName('img')[0];
     if (i != null) 
       getMove(i.src.toString());
     else 
@@ -111,7 +112,6 @@
   }
 
   function gameOver(image) {
-    
     if (normalMode) // end game if king is captured
       return image.outerHTML.includes('king');
     else // end game if either player loses all pieces
@@ -119,9 +119,6 @@
   }
 
   function getMove(s) {
-
-    var buttons = document.getElementsByTagName('button');
-
     if (s.includes('pawn')) {
         // one space forward (two spaces on first move)
         setPawnMoves();
@@ -174,8 +171,6 @@
   }
 
   function setHorizontalMoves() {
-    var btns = document.getElementsByTagName('button');
-
     var v = +currentIndex;
     while (true) {
       v += 1;
@@ -192,7 +187,6 @@
   }
 
   function setDiagonalMove(z) {
-    var btns = document.getElementsByTagName('button'); 
     for (i = 1; i < 9; i++) {
       var v = +currentIndex + z * i;
       var btn = btns[v];
@@ -236,21 +230,15 @@
   }
 
   function setKnightMoves() {
-
     var arr = [6, -6, 10, -10, 15, -15, 17, -17];   
-    
     for (i = 0; i < arr.length; i++)
       setButtonBorder(+currentIndex + arr[i], 5, 'gray');
   }
 
   function setKingMoves() {
-
     var arr = [-7, -8, -9, 7, 8, 9];
-
     for (i = 0; i < arr.length; i++)
       setButtonBorder(+currentIndex + arr[i], 5, 'gray');
-
-    var btns = document.getElementsByTagName('button'); 
 
     if (!attacker.includes(+currentIndex + 1)) {
       var z1 = +btns[+currentIndex + 1].style.left.replace('px', '');
@@ -269,39 +257,36 @@
 
   function clearMoves() {
     for (i = 0; i < 64; i++) {
-      var btn = document.getElementsByTagName('button')[i];
+      var btn = btns[i];
       if (btn.style.borderColor == 'gray')
         setButtonBorder(i, 2, 'white');
     }
   }
 
   function setDefaultImages() {
-
-      var buttons = document.getElementsByTagName('button');
-
-      buttons[0].appendChild(getImage('black_rook'));
-      buttons[1].appendChild(getImage('black_knight'));
-      buttons[2].appendChild(getImage('black_bishop'));
-      buttons[3].appendChild(getImage('black_king'));
-      buttons[4].appendChild(getImage('black_queen'));
-      buttons[5].appendChild(getImage('black_bishop'));
-      buttons[6].appendChild(getImage('black_knight'));
-      buttons[7].appendChild(getImage('black_rook'));
+      btns[0].appendChild(getImage('black_rook'));
+      btns[1].appendChild(getImage('black_knight'));
+      btns[2].appendChild(getImage('black_bishop'));
+      btns[3].appendChild(getImage('black_king'));
+      btns[4].appendChild(getImage('black_queen'));
+      btns[5].appendChild(getImage('black_bishop'));
+      btns[6].appendChild(getImage('black_knight'));
+      btns[7].appendChild(getImage('black_rook'));
 
       for (i = 8; i < 16; i++)
-        buttons[i].appendChild(getImage('black_pawn'));
+        btns[i].appendChild(getImage('black_pawn'));
 
       for (i = 48; i < 56; i++)
-        buttons[i].appendChild(getImage('white_pawn'));
+        btns[i].appendChild(getImage('white_pawn'));
 
-      buttons[56].appendChild(getImage('white_rook'));
-      buttons[57].appendChild(getImage('white_knight'));
-      buttons[58].appendChild(getImage('white_bishop'));
-      buttons[59].appendChild(getImage('white_king'));
-      buttons[60].appendChild(getImage('white_queen'));
-      buttons[61].appendChild(getImage('white_bishop'));
-      buttons[62].appendChild(getImage('white_knight'));
-      buttons[63].appendChild(getImage('white_rook'));
+      btns[56].appendChild(getImage('white_rook'));
+      btns[57].appendChild(getImage('white_knight'));
+      btns[58].appendChild(getImage('white_bishop'));
+      btns[59].appendChild(getImage('white_king'));
+      btns[60].appendChild(getImage('white_queen'));
+      btns[61].appendChild(getImage('white_bishop'));
+      btns[62].appendChild(getImage('white_knight'));
+      btns[63].appendChild(getImage('white_rook'));
   }
 
   function getImage(piece) {
@@ -315,14 +300,13 @@
     playerPieces = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
     opponentPieces = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63];
     gameIsActive = true;
-    var button = document.getElementsByTagName('button')[65];
+    var button = btns[65];
     button.textContent = normalMode ? 'Capture King' : 'Capture All';
     playersTurn = true;
   }
 
   function modeOnClick() {
-    var buttons = document.getElementsByTagName('button');
-    var button = buttons[65];
+    var button = btns[65];
     normalMode = !normalMode;
     button.textContent = normalMode ? 'Capture King' : 'Capture All'
   }
